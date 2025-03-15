@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
-import { GlobalStyles } from "../constants/styles";
+import { GlobalStyles } from "../../constants/styles";
 export default function ExpensesSummary({periodName, expenses }) {
-  console.log(expenses)
   const expensesSum = expenses.reduce((sum, expense) => sum + expense.amount, 0)
   return (
     <View style={styles.container}>
