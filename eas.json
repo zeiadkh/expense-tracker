@@ -3,7 +3,14 @@
     "version": ">= 16.2.1",
     "appVersionSource": "remote"
   },
- "build": {
+  "build": {
+    "no-firebase": {
+      "android": {
+        "buildType": "apk",
+        "credentialsSource": "remote",
+        "distribution": "internal"
+      }
+    },
     "preview": {
       "android": {
         "buildType": "apk",
@@ -27,9 +34,16 @@
       "developmentClient": true,
       "env": {
         "GOOGLE_SERVICES_JSON": "./android/app/google-services.json"
-        }
+      }
     },
-    "production": { 
+    "preview-direct": {
+      "android": {
+        "buildType": "apk",
+        "credentialsSource": "remote",
+        "distribution": "internal"
+      }
+    },
+    "production": {
       "android": {
         "buildType": "app-bundle",
         "env": {

@@ -21,7 +21,6 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.zkhal.expensetracker",
-      "googleServicesFile": "./android/app/google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
