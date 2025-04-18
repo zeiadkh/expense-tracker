@@ -11,7 +11,7 @@
         "distribution": "internal",
         "withoutCredentials": false,
         "env": {
-          "GOOGLE_SERVICES_JSON": "google-services.json"
+          "GOOGLE_SERVICES_JSON": "./android/app/google-services.json"
         }
       }
     },
@@ -19,21 +19,21 @@
       "android": {
         "gradleCommand": ":app:assembleRelease",
         "env": {
-          "GOOGLE_SERVICES_JSON": "google-services.json"
+          "GOOGLE_SERVICES_JSON": "./android/app/google-services.json"
         }
       }
     },
     "preview3": {
       "developmentClient": true,
       "env": {
-        "GOOGLE_SERVICES_JSON": "google-services.json"
+        "GOOGLE_SERVICES_JSON": "./android/app/google-services.json"
         }
     },
     "production": { 
       "android": {
         "buildType": "app-bundle",
         "env": {
-          "GOOGLE_SERVICES_JSON": "google-services.json"
+          "GOOGLE_SERVICES_JSON": "./android/app/google-services.json"
         }
       }
     }
