@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert, Platform, Pressable } from "react-native";
 import Input from "./Input";
 import Button from "../../components/UI/Button";
 import { getFormattedDate } from "../../util/date";
 import { GlobalStyles } from "../../constants/styles";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 export default function ExpenseForm({
   onSubmit,
   onCancel,
@@ -16,7 +17,7 @@ export default function ExpenseForm({
       isValid: true,
     },
     date: {
-      value: defaultValues ? getFormattedDate(defaultValues.date) : "",
+      value: defaultValues ? defaultValues.date : new Date(),
       isValid: true,
     },
     description: {
@@ -24,6 +25,9 @@ export default function ExpenseForm({
       isValid: true,
     },
   });
+  
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
   function inputChangeHandler(inputIndentifier, enteredInput) {
     setInputs((currentInputs) => {
       return {
@@ -31,6 +35,29 @@ export default function ExpenseForm({
         [inputIndentifier]: { value: enteredInput, isValid: true },
       };
     });
+  }
+
+  function dateChangeHandler(selectedDate) {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      // Fix timezone issue by setting time to noon
+      const adjustedDate = new Date(selectedDate);
+      adjustedDate.setHours(12, 0, 0, 0);
+      
+      setInputs((currentInputs) => {
+        return {
+          ...currentInputs,
+          date: { value: adjustedDate, isValid: true },
+        };
+      });
+    }
+  }
+
+  function showDatePickerHandler() {
+    setShowDatePicker(true);
+  }
+  function hideDatePicker() {
+    setShowDatePicker(false);
   }
 
   function submitHandler() {
@@ -80,17 +107,23 @@ export default function ExpenseForm({
             value: inputs.amount.value,
           }}
         />
-        <Input
-          style={{ flex: 1 }}
-          label={"Date"}
-          invalid={!inputs.date.isValid}
-          textInputConfig={{
-            placeholder: "YYYY-MM-DD",
-            maxLength: 10,
-            onChangeText: inputChangeHandler.bind(this, "date"),
-            value: inputs.date.value,
-          }}
-        />
+       <View style={[styles.dateContainer, { flex: 1 }]}>
+          <Text style={[styles.label, !inputs.date.isValid && styles.invalidLabel]}>Date</Text>
+          <Pressable onPress={showDatePickerHandler}>
+            <View style={[styles.dateButton, !inputs.date.isValid && styles.invalidInput]}>
+              <Text style={styles.dateText}>
+                {getFormattedDate(inputs.date.value)}
+              </Text>
+            </View>
+          </Pressable>
+          <DateTimePickerModal
+            isVisible={showDatePicker}
+            mode="date"
+            onConfirm={dateChangeHandler}
+            onCancel={hideDatePicker}
+            date={inputs.date.value}
+          />
+        </View>
       </View>
       <Input
         label={"Description"}
@@ -142,5 +175,32 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: GlobalStyles.colors.error500,
     margin: 8
-  }
+  },
+  dateContainer: {
+    marginHorizontal: 4,
+    marginVertical: 8,
+  },
+  label: {
+    fontSize: 12,
+    color: GlobalStyles.colors.primary100,
+    marginBottom: 4,
+  },
+  invalidLabel: {
+    color: GlobalStyles.colors.error500,
+  },
+  dateButton: {
+    padding: 6,
+    borderRadius: 6,
+    fontSize: 18,
+    backgroundColor: GlobalStyles.colors.primary100,
+    color: GlobalStyles.colors.primary700,
+    minHeight: 36,
+    justifyContent: 'center',
+  },
+  dateText: {
+    color: GlobalStyles.colors.primary700,
+  },
+  invalidInput: {
+    backgroundColor: GlobalStyles.colors.error50,
+  },
 });
