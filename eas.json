@@ -1,0 +1,44 @@
+{
+  "cli": {
+    "version": ">= 16.2.1",
+    "appVersionSource": "remote"
+  },
+ "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk",
+        "credentialsSource": "remote",
+        "distribution": "internal",
+        "withoutCredentials": false,
+        "env": {
+          "GOOGLE_SERVICES_JSON_PATH": "./android/app/google-services.json"
+        }
+      }
+    },
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease",
+        "env": {
+          "GOOGLE_SERVICES_JSON_PATH": "./android/app/google-services.json"
+        }
+      }
+    },
+    "preview3": {
+      "developmentClient": true,
+      "env": {
+        "GOOGLE_SERVICES_JSON_PATH": "./android/app/google-services.json"
+      }
+    },
+    "production": { 
+      "android": {
+        "buildType": "app-bundle",
+        "env": {
+          "GOOGLE_SERVICES_JSON_PATH": "./android/app/google-services.json"
+        }
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
